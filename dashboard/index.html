@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WattWatch — live office monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="bolt">&#9889;</span>
+    <div>
+      <h1>WattWatch</h1>
+      <p>the boss's live office monitor</p>
+    </div>
+  </div>
+  <div class="statusbar">
+    <span id="office-badge" class="badge">&mdash;</span>
+    <span id="clock" class="mono">--:--:--</span>
+    <span class="ws"><i id="ws-status" class="dot"></i><span id="ws-label">connecting&hellip;</span></span>
+  </div>
+</header>
+
+<main class="grid">
+
+  <!-- ===== signature element: the live floor plan ===================== -->
+  <!-- Device ids mirror the backend ("fp-" prefix). If you change        -->
+  <!-- FANS_PER_ROOM / LIGHTS_PER_ROOM in config, this SVG is the only    -->
+  <!-- thing that needs a manual edit — everything else adapts.           -->
+  <section class="panel floorplan">
+    <p class="eyebrow">Live floor plan</p>
+    <svg class="fp" viewBox="0 0 780 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top view of the office with live device states">
+      <defs>
+        <radialGradient id="glowGrad">
+          <stop offset="0%"  stop-color="#FFD48A" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#FFD48A" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- rooms -->
+      <rect class="room" x="12"  y="12" width="252" height="260"/>
+      <rect class="room" x="264" y="12" width="252" height="260"/>
+      <rect class="room" x="516" y="12" width="252" height="260"/>
+      <!-- corridor -->
+      <rect class="corridor" x="12" y="272" width="756" height="88"/>
+      <!-- outer wall + dividers -->
+      <rect class="wall" x="12" y="12" width="756" height="348" fill="none"/>
+      <line class="wall" x1="264" y1="12" x2="264" y2="272"/>
+      <line class="wall" x1="516" y1="12" x2="516" y2="272"/>
+      <line class="wall" x1="12"  y1="272" x2="768" y2="272"/>
+      <!-- door gaps -->
+      <line class="erase" x1="118" y1="272" x2="158" y2="272"/>
+      <line class="erase" x1="370" y1="272" x2="410" y2="272"/>
+      <line class="erase" x1="622" y1="272" x2="662" y2="272"/>
+      <line class="erase" x1="370" y1="360" x2="410" y2="360"/>
+      <text class="fp-entry" x="390" y="374">&#9650;</text>
+      <text class="fp-label" x="390" y="392">ENTRY</text>
+      <text class="fp-corridor" x="60" y="322">CORRIDOR</text>
+
+      <!-- room labels + live watts -->
+      <text class="fp-room" x="138" y="38">DRAWING ROOM</text>
+      <text class="fp-room" x="390" y="38">WORK ROOM 1</text>
+      <text class="fp-room" x="642" y="38">WORK ROOM 2</text>
+      <text class="fp-watts mono" id="fp-watts-drawing" x="30"  y="258">0W</text>
+      <text class="fp-watts mono" id="fp-watts-work1"   x="282" y="258">0W</text>
+      <text class="fp-watts mono" id="fp-watts-work2"   x="534" y="258">0W</text>
+
+      <!-- furniture (decorative) -->
+      <rect class="furn" x="40"  y="120" width="30" height="84" rx="5"/>
+      <rect class="furn" x="84"  y="144" width="28" height="36" rx="4"/>
+      <rect class="furn" x="298" y="92"  width="64" height="30" rx="4"/>
+      <rect class="furn" x="418" y="92"  width="64" height="30" rx="4"/>
+      <rect class="furn" x="550" y="92"  width="64" height="30" rx="4"/>
+      <rect class="furn" x="670" y="92"  width="64" height="30" rx="4"/>
+
+      <!-- DRAWING ROOM devices -->
+      <g class="light" id="fp-drawing-light-1" transform="translate(75,64)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="light" id="fp-drawing-light-2" transform="translate(201,64)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="light" id="fp-drawing-light-3" transform="translate(138,233)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="fan" id="fp-drawing-fan-1" transform="translate(88,155)"><g class="blades"><ellipse cx="0" cy="-9" rx="3.2" ry="9"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(240)"/></g><circle class="hub" r="3.5"/></g>
+      <g class="fan" id="fp-drawing-fan-2" transform="translate(188,155)"><g class="blades"><ellipse cx="0" cy="-9" rx="3.2" ry="9"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(240)"/></g><circle class="hub" r="3.5"/></g>
+
+      <!-- WORK ROOM 1 devices -->
+      <g class="light" id="fp-work1-light-1" transform="translate(327,64)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="light" id="fp-work1-light-2" transform="translate(453,64)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="light" id="fp-work1-light-3" transform="translate(390,233)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="fan" id="fp-work1-fan-1" transform="translate(340,155)"><g class="blades"><ellipse cx="0" cy="-9" rx="3.2" ry="9"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(240)"/></g><circle class="hub" r="3.5"/></g>
+      <g class="fan" id="fp-work1-fan-2" transform="translate(440,155)"><g class="blades"><ellipse cx="0" cy="-9" rx="3.2" ry="9"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(240)"/></g><circle class="hub" r="3.5"/></g>
+
+      <!-- WORK ROOM 2 devices -->
+      <g class="light" id="fp-work2-light-1" transform="translate(579,64)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="light" id="fp-work2-light-2" transform="translate(705,64)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="light" id="fp-work2-light-3" transform="translate(642,233)"><circle class="glow" r="20"/><circle class="bulb" r="6"/></g>
+      <g class="fan" id="fp-work2-fan-1" transform="translate(592,155)"><g class="blades"><ellipse cx="0" cy="-9" rx="3.2" ry="9"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(240)"/></g><circle class="hub" r="3.5"/></g>
+      <g class="fan" id="fp-work2-fan-2" transform="translate(692,155)"><g class="blades"><ellipse cx="0" cy="-9" rx="3.2" ry="9"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="3.2" ry="9" transform="rotate(240)"/></g><circle class="hub" r="3.5"/></g>
+    </svg>
+    <p class="fp-hint">lights glow when ON &middot; fans spin when running &middot; live over WebSocket</p>
+  </section>
+
+  <!-- ===== power + alerts ============================================= -->
+  <aside class="side">
+    <section class="panel power">
+      <p class="eyebrow">Power draw &middot; whole office</p>
+      <div class="watt-big"><span id="total-watts">0</span><small>W</small></div>
+      <p class="kwh">today so far &asymp; <span id="today-kwh" class="mono">&ndash;</span> kWh</p>
+      <div id="room-bars"></div>
+    </section>
+
+    <section class="panel alerts">
+      <p class="eyebrow">Alerts</p>
+      <div id="alerts-list"></div>
+      <div id="alerts-recent"></div>
+    </section>
+  </aside>
+
+  <!-- ===== per-room device panels (built by app.js) =================== -->
+  <section class="rooms" id="rooms"></section>
+
+</main>
+
+<footer class="foot">one backend, one truth &mdash; this dashboard and the Discord bot read the same live store</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
