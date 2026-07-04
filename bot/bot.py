@@ -18,15 +18,17 @@ Run from the project root:  python -m bot.bot
 
 import os
 import random
+from pathlib import Path
 
 import discord
 import httpx
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-load_dotenv()
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(ENV_PATH, override=True)
 
-TOKEN = os.getenv("DISCORD_TOKEN", "")
+TOKEN = os.getenv("DISCORD_TOKEN", "").strip().strip('"').strip("'")
 BACKEND = os.getenv("BACKEND_URL", "http://127.0.0.1:8000").rstrip("/")
 ALERT_CHANNEL_ID = int(os.getenv("ALERT_CHANNEL_ID", "0"))
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
