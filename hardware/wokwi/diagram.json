@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "author": "WattWatch — one-room sensing node (representative circuit)",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 120, "left": 20, "attrs": {} },
+
+    { "type": "wokwi-slide-switch", "id": "sw_l1", "top": -30, "left": 300, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw_l2", "top": 50,  "left": 300, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw_l3", "top": 130, "left": 300, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw_f1", "top": 210, "left": 300, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw_f2", "top": 290, "left": 300, "attrs": {} },
+
+    { "type": "wokwi-resistor", "id": "r_l1", "top": -15, "left": 420, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r_l2", "top": 65,  "left": 420, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r_l3", "top": 145, "left": 420, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r_f1", "top": 225, "left": 420, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r_f2", "top": 305, "left": 420, "attrs": { "value": "220" } },
+
+    { "type": "wokwi-led", "id": "led_l1", "top": -30, "left": 540, "attrs": { "color": "yellow", "label": "Light 1" } },
+    { "type": "wokwi-led", "id": "led_l2", "top": 50,  "left": 540, "attrs": { "color": "yellow", "label": "Light 2" } },
+    { "type": "wokwi-led", "id": "led_l3", "top": 130, "left": 540, "attrs": { "color": "yellow", "label": "Light 3" } },
+    { "type": "wokwi-led", "id": "led_f1", "top": 210, "left": 540, "attrs": { "color": "red", "label": "Fan 1" } },
+    { "type": "wokwi-led", "id": "led_f2", "top": 290, "left": 540, "attrs": { "color": "red", "label": "Fan 2" } }
+  ],
+  "connections": [
+    [ "esp:3V3", "sw_l1:2", "red", [] ],
+    [ "esp:3V3", "sw_l2:2", "red", [] ],
+    [ "esp:3V3", "sw_l3:2", "red", [] ],
+    [ "esp:3V3", "sw_f1:2", "red", [] ],
+    [ "esp:3V3", "sw_f2:2", "red", [] ],
+
+    [ "sw_l1:1", "esp:D32", "cyan", [] ],
+    [ "sw_l2:1", "esp:D33", "cyan", [] ],
+    [ "sw_l3:1", "esp:D25", "cyan", [] ],
+    [ "sw_f1:1", "esp:D26", "cyan", [] ],
+    [ "sw_f2:1", "esp:D27", "cyan", [] ],
+
+    [ "sw_l1:1", "r_l1:1", "gold", [] ],
+    [ "sw_l2:1", "r_l2:1", "gold", [] ],
+    [ "sw_l3:1", "r_l3:1", "gold", [] ],
+    [ "sw_f1:1", "r_f1:1", "gold", [] ],
+    [ "sw_f2:1", "r_f2:1", "gold", [] ],
+
+    [ "r_l1:2", "led_l1:A", "gold", [] ],
+    [ "r_l2:2", "led_l2:A", "gold", [] ],
+    [ "r_l3:2", "led_l3:A", "gold", [] ],
+    [ "r_f1:2", "led_f1:A", "gold", [] ],
+    [ "r_f2:2", "led_f2:A", "gold", [] ],
+
+    [ "led_l1:C", "esp:GND.1", "black", [] ],
+    [ "led_l2:C", "esp:GND.1", "black", [] ],
+    [ "led_l3:C", "esp:GND.1", "black", [] ],
+    [ "led_f1:C", "esp:GND.1", "black", [] ],
+    [ "led_f2:C", "esp:GND.1", "black", [] ]
+  ]
+}

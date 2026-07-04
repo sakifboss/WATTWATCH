@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="620" fill="#F7FAFC"/>
+
+  <!-- title -->
+  <text x="40" y="44" font-size="23" font-weight="700" fill="#0F172A">WattWatch — System Architecture</text>
+  <text x="40" y="68" font-size="12.5" fill="#64748B">[ Simulated Device Layer ]  →  [ Backend API ]  →  [ Web Dashboard ]  +  [ Discord Bot ]   ·   one source of truth</text>
+
+  <!-- ===================== column A: device layer ===================== -->
+  <rect x="40" y="110" width="250" height="130" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+  <text x="56" y="138" font-size="15" font-weight="700" fill="#0F172A">Simulated Device Layer</text>
+  <text x="56" y="156" font-size="11" fill="#94A3B8">backend/simulator.py</text>
+  <text x="56" y="180" font-size="12" fill="#475569">15 devices · 3 rooms</text>
+  <text x="56" y="198" font-size="12" fill="#475569">time-of-day occupancy model</text>
+  <text x="56" y="216" font-size="12" fill="#475569">reconsiders states every ~3 s</text>
+
+  <rect x="40" y="330" width="250" height="130" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="56" y="358" font-size="15" font-weight="700" fill="#0F172A">Real hardware — concept</text>
+  <text x="56" y="376" font-size="11" fill="#94A3B8">hardware/wokwi (ESP32 room node)</text>
+  <text x="56" y="400" font-size="12" fill="#475569">taps each wall-switch line (GPIO)</text>
+  <text x="56" y="418" font-size="12" fill="#475569">emits the same JSON schema</text>
+  <text x="56" y="436" font-size="12" fill="#475569">would swap in with zero UI changes</text>
+
+  <!-- ===================== column B: backend ===================== -->
+  <rect x="375" y="90" width="280" height="380" rx="12" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
+  <text x="395" y="120" font-size="16" font-weight="700" fill="#0F172A">Backend — FastAPI</text>
+  <text x="395" y="139" font-size="11" fill="#B45309">backend/main.py · one process · single source of truth</text>
+
+  <rect x="395" y="152" width="240" height="62" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="409" y="176" font-size="13" font-weight="700" fill="#0F172A">In-memory Store</text>
+  <text x="409" y="194" font-size="11.5" fill="#475569">device states · today's kWh counter</text>
+
+  <rect x="395" y="224" width="240" height="62" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="409" y="248" font-size="13" font-weight="700" fill="#0F172A">Alert Engine</text>
+  <text x="409" y="266" font-size="11.5" fill="#475569">after-hours ON · room all-on &gt; 2 h</text>
+
+  <rect x="395" y="296" width="240" height="62" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="409" y="320" font-size="13" font-weight="700" fill="#0F172A">REST API</text>
+  <text x="409" y="338" font-size="11.5" fill="#475569">/api/state · /rooms/{id} · /usage · /alerts</text>
+
+  <rect x="395" y="368" width="240" height="62" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="409" y="392" font-size="13" font-weight="700" fill="#0F172A">WebSocket  /ws</text>
+  <text x="409" y="410" font-size="11.5" fill="#475569">full snapshot pushed on every tick</text>
+
+  <!-- ===================== column C: clients ===================== -->
+  <rect x="740" y="90" width="230" height="130" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+  <text x="756" y="118" font-size="15" font-weight="700" fill="#0F172A">Web Dashboard</text>
+  <text x="756" y="136" font-size="11" fill="#94A3B8">dashboard/ · browser, no refresh</text>
+  <text x="756" y="160" font-size="12" fill="#475569">live floor plan — glow &amp; spin</text>
+  <text x="756" y="178" font-size="12" fill="#475569">power meter + per-room bars</text>
+  <text x="756" y="196" font-size="12" fill="#475569">timestamped alerts panel</text>
+
+  <rect x="740" y="270" width="230" height="120" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+  <text x="756" y="298" font-size="15" font-weight="700" fill="#0F172A">Discord Bot</text>
+  <text x="756" y="316" font-size="11" fill="#94A3B8">bot/bot.py · REST client only</text>
+  <text x="756" y="340" font-size="12" fill="#475569">!status · !room · !usage · !alerts</text>
+  <text x="756" y="358" font-size="12" fill="#475569">polls for new alerts every 30 s</text>
+  <text x="756" y="376" font-size="12" fill="#475569">optional: Claude API polishes replies</text>
+
+  <rect x="740" y="440" width="230" height="110" rx="10" fill="#EEF2FF" stroke="#818CF8" stroke-width="1.5"/>
+  <text x="756" y="468" font-size="15" font-weight="700" fill="#0F172A">Discord Server</text>
+  <text x="756" y="492" font-size="12" fill="#475569">#general — commands &amp; replies</text>
+  <text x="756" y="510" font-size="12" fill="#475569">#alerts — proactive warnings</text>
+  <text x="756" y="528" font-size="12" fill="#475569">the boss &amp; the team</text>
+
+  <!-- ===================== arrows ===================== -->
+  <!-- devices -> backend -->
+  <line x1="290" y1="175" x2="371" y2="175" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="330" y="165" font-size="10.5" fill="#475569" text-anchor="middle">state changes</text>
+
+  <!-- future hardware -> backend (dashed) -->
+  <line x1="290" y1="395" x2="371" y2="395" stroke="#94A3B8" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <text x="330" y="411" font-size="10" fill="#94A3B8" text-anchor="middle">future:</text>
+  <text x="330" y="423" font-size="10" fill="#94A3B8" text-anchor="middle">HTTP POST /ingest</text>
+
+  <!-- backend -> dashboard -->
+  <line x1="655" y1="155" x2="736" y2="155" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="695" y="133" font-size="10.5" fill="#475569" text-anchor="middle">WebSocket push</text>
+  <text x="695" y="145" font-size="10.5" fill="#475569" text-anchor="middle">JSON snapshot</text>
+
+  <!-- backend <-> bot -->
+  <line x1="655" y1="330" x2="736" y2="330" stroke="#475569" stroke-width="1.8" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="695" y="320" font-size="10.5" fill="#475569" text-anchor="middle">REST · JSON</text>
+
+  <!-- bot <-> discord server -->
+  <line x1="855" y1="390" x2="855" y2="436" stroke="#475569" stroke-width="1.8" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="864" y="416" font-size="10" fill="#475569">commands · replies · alerts</text>
+
+  <!-- footer -->
+  <text x="500" y="596" font-size="12.5" fill="#64748B" text-anchor="middle">One backend, one truth — the dashboard and the bot can never disagree.</text>
+</svg>
